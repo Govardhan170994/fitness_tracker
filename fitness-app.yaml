@@ -1,0 +1,43 @@
+# K8S deployment manifest file ( POD Manifest + Service Manifest )
+
+---
+# POD Deployment Manifest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitnessappdeployment
+  labels:
+    app: fitnessapp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: fitnessapp
+  template:
+    metadata:
+     name: fitnessapppod
+     labels:
+       app: fitnessapp
+    spec:
+      containers:
+      - name: fitnessappcontainer
+        image: govardhankuchi/fitnessapp:v4
+        ports:
+        - containerPort: 8080
+---
+
+---
+# Service Manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: fitnessappsvc
+spec:
+  type: NodePort
+  selector:
+    app: fitnessapp
+  ports:
+    - port: 80
+      targetPort: 8080
